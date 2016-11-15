@@ -15,6 +15,8 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
@@ -28,22 +30,29 @@ import Control.SilenceInfo;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import sun.swing.table.DefaultTableCellHeaderRenderer;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.Panel;
 import javax.swing.JScrollBar;
+import javax.swing.JPanel;
+import java.awt.Color;
 
 public class MainMenu {
-
+	
+	
 	private JFrame frmSoundExtractor;
 	private JTextField TxtthresholdInSec;
 	private JTextField TxtMaxDB;
 	private MenuManager Menu;
 	private JTable tblSilence;
-	
+	private ArrayList<SilenceInfo> silence;
 	/**
 	 * Launch the application.
 	 */
@@ -95,6 +104,11 @@ public class MainMenu {
 		TxtMaxDB.setColumns(10);
 		
 		JButton btnExportXml = new JButton("Export XML");
+		btnExportXml.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Menu.CreateXML(silence); 
+			}
+		});
 		btnExportXml.setLocation(388, 238);
 		btnExportXml.setSize(125, 25);
 		btnExportXml.setEnabled(false);
@@ -105,8 +119,9 @@ public class MainMenu {
 		btnFindSilence.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					ArrayList<SilenceInfo> silence = Menu.CheckSilence(TxtMaxDB.getText(), TxtthresholdInSec.getText());
+					silence = Menu.CheckSilence(TxtMaxDB.getText(), TxtthresholdInSec.getText());
 					PopulateTable(silence);
+					btnExportXml.setEnabled(true);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					 JOptionPane.showMessageDialog(new JFrame(), "Ocorreu um erro inesperado.", "Dialog",
@@ -186,6 +201,14 @@ public class MainMenu {
 		tblSilence.getColumnModel().getColumn(2).setResizable(false);
 		tblSilence.setFillsViewportHeight(true);
 		tblSilence.setBounds(10, 11, 190, 372);
+		tblSilence.addMouseListener(new MouseAdapter(){
+		    public void mouseClicked(MouseEvent evnt) {
+		        if (evnt.getClickCount() == 1) {
+		        	Menu.container.GetWaveformPanels().get(0).drawTheBeach(silence.get(tblSilence.getSelectedRow()));
+		         }
+		     }
+		});
+		
 		//frmSoundExtractor.getContentPane().add(tblSilence);
 		
 		JScrollPane scroll = new JScrollPane();

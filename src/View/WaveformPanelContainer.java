@@ -25,6 +25,10 @@ public class WaveformPanelContainer extends JPanel {
 		return this.singleChannelWaveformPanels;
 	}
 	
+	public void SetWaveformPanels(ArrayList<SingleWaveformPanel> value){
+		this.singleChannelWaveformPanels = value;
+	}
+	
 	public void setAudioToDisplay(AudioInputStream audioInputStream){
 		singleChannelWaveformPanels = new ArrayList<SingleWaveformPanel>();
 		audioInfo = new Audio_Info(audioInputStream);

@@ -13,6 +13,20 @@ import javax.sound.sampled.AudioSystem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.sun.javafx.scene.paint.GradientUtils.Parser;
 
 import View.SingleWaveformPanel;
 import View.WaveformPanelContainer;
@@ -26,7 +40,7 @@ public class MenuManager {
 	JFileChooser chooser;
 	File source;
 	File target;
-	WaveformPanelContainer container;
+	public WaveformPanelContainer container;
 	AudioInputStream audioInputStream;
 	
 	public MenuManager(){
@@ -99,6 +113,58 @@ public class MenuManager {
 		silenceInfo = arr.get(0).CheckSilence(format,secs,db);
 		JOptionPane.showMessageDialog(null, "Busca concluida.");
 		return silenceInfo;
+	}
+	
+	public void CreateXML(ArrayList<SilenceInfo> silenceInfo){
+		try
+		{
+		  DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		  DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+		  //root elements
+		  Document doc = docBuilder.newDocument();
+
+		  Element rootElement = doc.createElement("SilenceInfo");
+		  doc.appendChild(rootElement);
+		  
+		  for(int i = 0; i < silenceInfo.size(); i++){
+
+			  Element row = doc.createElement("Row");
+			  rootElement.appendChild(row);
+			  row.setAttribute("id", Integer.toString(i));
+			  
+			  String info = Float.toString(silenceInfo.get(i).GetStart());
+			  
+			  Element start = doc.createElement("start");
+			  start.appendChild(doc.createTextNode(info));
+			  row.appendChild(start);
+			  
+			  info = Float.toString(silenceInfo.get(i).GetEnd());
+			  Element end = doc.createElement("end");
+			  end.appendChild(doc.createTextNode(info));
+			  row.appendChild(end);
+			  
+			  info = Float.toString(silenceInfo.get(i).GetDuration());
+			  Element duration = doc.createElement("duration");
+			  duration.appendChild(doc.createTextNode(info));
+			  row.appendChild(duration);
+		  }
+		  //write the content into xml file
+		  TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		  Transformer transformer = transformerFactory.newTransformer();
+		  DOMSource source = new DOMSource(doc);
+		  JOptionPane.showMessageDialog(null, "Escolha um diretório e o nome do arquivo");
+		  chooser.showSaveDialog(null);
+		  StreamResult result =  new StreamResult(new File(chooser.getSelectedFile()+".xml"));
+		  transformer.transform(source, result);
+
+		  JOptionPane.showMessageDialog(null, "Feito.");
+
+		}catch(ParserConfigurationException pce){
+		  pce.printStackTrace();
+		}catch(TransformerException tfe){
+		  tfe.printStackTrace();
+		}
 	}
 	
 }

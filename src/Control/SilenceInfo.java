@@ -5,12 +5,20 @@ public class SilenceInfo {
 	private float start = 0;
 	private float end = 0;
 	
-	private double startSec;
-	private double endSec;
-	private double durationTime;
+	private int startIndex;
+	private int endIndex;
+	
+	public int GetStartIndex(){
+		return this.startIndex;
+	}
+	
+	public int GetEndIndex(){
+		return this.endIndex;
+	}
 	
 	public void SetStart(float start){
 		this.start = start;
+		this.startIndex = (int)start;
 	}
 	
 	public float GetStart(){
@@ -19,6 +27,7 @@ public class SilenceInfo {
 	
 	public void SetEnd(float end){
 		this.end = end;
+		this.endIndex = (int)end;
 	}
 	
 	public float GetEnd(){
@@ -31,11 +40,14 @@ public class SilenceInfo {
 	
 	public SilenceInfo(float start){
 		this.start = start;
+		this.startIndex = (int)start;
 	}
 	
 	public SilenceInfo(float start, float end){
 		this.start = start;
 		this.end = end;
+		this.startIndex = (int)start;
+		this.endIndex = (int)end;
 	}
 	
 	public void CalculateDuration(double SampleRate){
@@ -43,5 +55,4 @@ public class SilenceInfo {
 		this.end = this.end/(float)SampleRate;
 		this.duration = (this.end - this.start);
 	}
-	
 }
