@@ -39,6 +39,7 @@ public class SingleWaveformPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        drawnSamples.clear();
         int lineHeight = getHeight() / 2;
         g.setColor(REFERENCE_LINE_COLOR);
         g.drawLine(0, lineHeight, (int)getWidth(), lineHeight);
@@ -46,8 +47,10 @@ public class SingleWaveformPanel extends JPanel {
     }
     
     public void drawTheBeach(SilenceInfo silenceInfo){
-    	DrawnSample drawnS = drawnSamples.get(silenceInfo.GetStartIndex());
-    	DrawnSample drawnE = drawnSamples.get(silenceInfo.GetEndIndex());
+    	int proportionalS =(int) (silenceInfo.GetStartIndex()*helper.getXScaleFactor(getWidth())/samples.length);
+    	int proportionalE =(int) (silenceInfo.GetEndIndex()*helper.getXScaleFactor(getWidth())/samples.length);
+    	DrawnSample drawnS = drawnSamples.get((int) (silenceInfo.GetStartIndex()/helper.getXScaleFactor(getWidth())));
+    	DrawnSample drawnE = drawnSamples.get((int) (silenceInfo.GetEndIndex()/helper.getXScaleFactor(getWidth())));
     	this.getGraphics().drawRect(silenceInfo.GetStartIndex(), getHeight()/2, 30, 30);
     	this.getGraphics().drawRect(silenceInfo.GetEndIndex(), getHeight()/2, 30, 30);
     }
@@ -85,7 +88,7 @@ public class SingleWaveformPanel extends JPanel {
             oldY = y;
         }
     }
-    
+    /*standard range of audible frequencies is 20 to 20,000 Hz*/
     public ArrayList<SilenceInfo> CheckSilence(AudioFormat format, double Secs, double db) throws Exception{
     	ArrayList<SilenceInfo> silenceInfo = new ArrayList<SilenceInfo>();
     	

@@ -57,7 +57,9 @@ public class Audio_Info {
         for (int t = 0; t < eightBitByteArray.length;) {
             //for each iteration, loop through the channels
             for (int a = 0; a < getNumberOfChannels(); a++) {
-                //do the byte to sample conversion
+                //do the byte to sample conversion 
+            	/*standard range of audible frequencies is 20 to 20,000 Hz(Hz)
+            	 * https://en.wikipedia.org/wiki/Audio_frequency*/
                 //see AmplitudeEditor for more info
                 int low = (int) eightBitByteArray[t];
                 t++;
