@@ -47,12 +47,12 @@ public class SingleWaveformPanel extends JPanel {
     }
     
     public void drawTheBeach(SilenceInfo silenceInfo){
-    	int proportionalS =(int) (silenceInfo.GetStartIndex()*helper.getXScaleFactor(getWidth())/samples.length);
+    	/*int proportionalS =(int) (silenceInfo.GetStartIndex()*helper.getXScaleFactor(getWidth())/samples.length);
     	int proportionalE =(int) (silenceInfo.GetEndIndex()*helper.getXScaleFactor(getWidth())/samples.length);
     	DrawnSample drawnS = drawnSamples.get((int) (silenceInfo.GetStartIndex()/helper.getXScaleFactor(getWidth())));
     	DrawnSample drawnE = drawnSamples.get((int) (silenceInfo.GetEndIndex()/helper.getXScaleFactor(getWidth())));
     	this.getGraphics().drawRect(silenceInfo.GetStartIndex(), getHeight()/2, 30, 30);
-    	this.getGraphics().drawRect(silenceInfo.GetEndIndex(), getHeight()/2, 30, 30);
+    	this.getGraphics().drawRect(silenceInfo.GetEndIndex(), getHeight()/2, 30, 30);*/
     }
     
     protected void drawWaveform(Graphics g, int[] samples) {
